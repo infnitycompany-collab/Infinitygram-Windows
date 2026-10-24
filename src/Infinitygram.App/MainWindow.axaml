@@ -1,0 +1,240 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Infinitygram.App.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="700"
+        x:Class="Infinitygram.App.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="INFINITYGRAM"
+        Background="#0A0A0A"
+        Width="1280" Height="720"
+        MinWidth="1024" MinHeight="640">
+
+    <Design.DataContext>
+        <vm:MainViewModel />
+    </Design.DataContext>
+
+    <Window.Styles>
+        <Style Selector="ListBoxItem">
+            <Setter Property="Background" Value="#0A1B33" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Padding" Value="10,8" />
+        </Style>
+        <Style Selector="ListBoxItem:selected">
+            <Setter Property="Background" Value="#3A3F4A" />
+            <Setter Property="Foreground" Value="#D4A017" />
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="#2B2B2B" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderBrush" Value="#444444" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="MinHeight" Value="38" />
+            <Setter Property="Padding" Value="8,6" />
+        </Style>
+        <Style Selector="CheckBox">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="15" />
+        </Style>
+    </Window.Styles>
+
+    <Grid RowDefinitions="*,36">
+        <Grid ColumnDefinitions="220,*">
+            <Border Grid.Column="0" Background="#0A1B33" Padding="10">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="INFINITYGRAM" Foreground="#D4A017" FontSize="22" FontWeight="Bold" Margin="4,6,4,0" />
+                    <TextBlock Text="INFINITY" Foreground="White" FontSize="12" Margin="4,0,4,10" />
+                    <Button Content="عربي / English" Command="{Binding ToggleLanguageCommand}"
+                            Background="#1E2A44" Foreground="White" HorizontalAlignment="Stretch" Height="36" />
+                    <ListBox ItemsSource="{Binding Modules}" SelectedItem="{Binding SelectedModule}" Background="Transparent" BorderThickness="0">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="vm:NavModule">
+                                <TextBlock Text="{Binding TitleAr}" FontSize="15" TextWrapping="Wrap" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+            </Border>
+
+            <Grid Grid.Column="1" RowDefinitions="56,*">
+                <Border Grid.Row="0">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                            <GradientStop Offset="0" Color="#0A1B33" />
+                            <GradientStop Offset="1" Color="#1B3A6B" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <TextBlock Text="{Binding SelectedTitle}" Foreground="White" FontSize="22" FontWeight="Bold"
+                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+
+                <ScrollViewer Grid.Row="1" Background="#0A0A0A">
+                    <StackPanel Margin="16" Spacing="10">
+
+                        <StackPanel Spacing="8" IsVisible="{Binding IsDashboardVisible}">
+                            <Grid ColumnDefinitions="*,*,*">
+                                <Border Grid.Column="0" Background="#1E2433" BorderBrush="#2E3A55" BorderThickness="1" Padding="16" Margin="0,0,6,0">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Text="{Binding DashboardAccountCount}" Foreground="#D4A017" FontSize="32" FontWeight="Bold" HorizontalAlignment="Center" />
+                                        <TextBlock Text="الحسابات" Foreground="White" FontSize="15" HorizontalAlignment="Center" />
+                                    </StackPanel>
+                                </Border>
+                                <Border Grid.Column="1" Background="#1E2433" BorderBrush="#2E3A55" BorderThickness="1" Padding="16" Margin="6,0,6,0">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Text="{Binding DashboardReportCount}" Foreground="#D4A017" FontSize="32" FontWeight="Bold" HorizontalAlignment="Center" />
+                                        <TextBlock Text="التقارير" Foreground="White" FontSize="15" HorizontalAlignment="Center" />
+                                    </StackPanel>
+                                </Border>
+                                <Border Grid.Column="2" Background="#1E2433" BorderBrush="#2E3A55" BorderThickness="1" Padding="16" Margin="6,0,0,0">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Text="{Binding DashboardModuleCount}" Foreground="#D4A017" FontSize="32" FontWeight="Bold" HorizontalAlignment="Center" />
+                                        <TextBlock Text="الوحدات" Foreground="White" FontSize="15" HorizontalAlignment="Center" />
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                        </StackPanel>
+
+                        <StackPanel Spacing="8" IsVisible="{Binding IsAccountsVisible}">
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="معرّف الحساب" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding AccountsVM.AccountId}" /></Grid>
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="الاسم المعروض" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding AccountsVM.DisplayName}" /></Grid>
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="api_id" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding AccountsVM.ApiIdText}" /></Grid>
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="api_hash" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" PasswordChar="•" Text="{Binding AccountsVM.ApiHash}" /></Grid>
+                            <Grid ColumnDefinitions="*,*,*">
+                                <Button Grid.Column="0" Content="إضافة" Command="{Binding AccountsVM.AddAccountCommand}" Background="#D4A017" Foreground="Black" FontWeight="Bold" Height="44" Margin="0,0,4,0" />
+                                <Button Grid.Column="1" Content="حذف" Command="{Binding AccountsVM.DeleteAccountCommand}" Background="#3A3F4A" Foreground="White" Height="44" Margin="4,0,4,0" />
+                                <Button Grid.Column="2" Content="تحديث" Command="{Binding AccountsVM.RefreshCommand}" Background="#3A3F4A" Foreground="White" Height="44" Margin="4,0,0,0" />
+                            </Grid>
+                            <TextBlock Text="{Binding AccountsVM.StatusText}" Foreground="White" FontSize="14" TextWrapping="Wrap" />
+                            <ListBox ItemsSource="{Binding AccountsVM.AccountLines}" Background="#1E2433" Height="220" />
+                        </StackPanel>
+
+                        <StackPanel Spacing="8" IsVisible="{Binding IsActiveVisible}">
+                            <Border Background="#1E2433" BorderBrush="#2E3A55" BorderThickness="1" Padding="14">
+                                <StackPanel Spacing="10">
+                                    <CheckBox Content="الاسم مضبوط" IsChecked="{Binding ActivationVM.NameSet}" />
+                                    <CheckBox Content="الصورة مضبوطة" IsChecked="{Binding ActivationVM.PhotoSet}" />
+                                    <CheckBox Content="البايو مضبوط" IsChecked="{Binding ActivationVM.BioSet}" />
+                                    <CheckBox Content="اليوزر مضبوط" IsChecked="{Binding ActivationVM.UsernameSet}" />
+                                </StackPanel>
+                            </Border>
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="الجروبات" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding ActivationVM.GroupsText}" /></Grid>
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="القنوات الخاصة" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding ActivationVM.ChannelsText}" /></Grid>
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="الرسائل" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding ActivationVM.MessagesText}" /></Grid>
+                            <Button Content="حساب الحالة" Command="{Binding ActivationVM.ComputeCommand}" Background="#D4A017" Foreground="Black" FontWeight="Bold" Height="48" HorizontalAlignment="Stretch" />
+                            <TextBlock Text="{Binding ActivationVM.ResultText}" Foreground="White" FontSize="15" TextWrapping="Wrap" />
+                        </StackPanel>
+
+                        <StackPanel Spacing="8" IsVisible="{Binding IsSearchVisible}">
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="البادئة" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding SearchVM.Prefix}" /></Grid>
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="العدد" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding SearchVM.CountText}" /></Grid>
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="الطول" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding SearchVM.LengthText}" /></Grid>
+                            <Button Content="توليد" Command="{Binding SearchVM.RunCommand}" Background="#D4A017" Foreground="Black" FontWeight="Bold" Height="48" HorizontalAlignment="Stretch" />
+                            <TextBox Text="{Binding SearchVM.ResultText}" IsReadOnly="True" AcceptsReturn="True" Height="260" TextWrapping="Wrap" />
+                        </StackPanel>
+
+                        <StackPanel Spacing="8" IsVisible="{Binding IsJoinVisible}">
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="رابط الجروب" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding JoinVM.GroupLink}" /></Grid>
+                            <Button Content="انضمام" Command="{Binding JoinVM.RunCommand}" Background="#D4A017" Foreground="Black" FontWeight="Bold" Height="48" HorizontalAlignment="Stretch" />
+                            <TextBlock Text="{Binding JoinVM.ResultText}" Foreground="White" FontSize="15" TextWrapping="Wrap" />
+                        </StackPanel>
+
+                        <StackPanel Spacing="8" IsVisible="{Binding IsExtractionVisible}">
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="Group ID" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding ExtractionVM.GroupId}" /></Grid>
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="إجمالي الأعضاء" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding ExtractionVM.TotalMembersText}" /></Grid>
+                            <Button Content="استخراج" Command="{Binding ExtractionVM.RunCommand}" Background="#D4A017" Foreground="Black" FontWeight="Bold" Height="48" HorizontalAlignment="Stretch" />
+                            <TextBlock Text="{Binding ExtractionVM.StatusText}" Foreground="White" FontSize="15" TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding ExtractionVM.ResultText}" Foreground="White" FontSize="15" TextWrapping="Wrap" />
+                        </StackPanel>
+
+                        <StackPanel Spacing="8" IsVisible="{Binding IsFilterVisible}">
+                            <TextBox Text="{Binding FilterVM.InputText}" AcceptsReturn="True" Height="220" TextWrapping="Wrap" />
+                            <Button Content="فلترة" Command="{Binding FilterVM.RunCommand}" Background="#D4A017" Foreground="Black" FontWeight="Bold" Height="48" HorizontalAlignment="Stretch" />
+                            <TextBlock Text="{Binding FilterVM.ResultText}" Foreground="White" FontSize="15" TextWrapping="Wrap" />
+                        </StackPanel>
+
+                        <StackPanel Spacing="8" IsVisible="{Binding IsSendVisible}">
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="الهدف" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding SendVM.Target}" /></Grid>
+                            <TextBox Text="{Binding SendVM.MessageText}" AcceptsReturn="True" Height="160" TextWrapping="Wrap" />
+                            <Button Content="إرسال" Command="{Binding SendVM.RunCommand}" Background="#D4A017" Foreground="Black" FontWeight="Bold" Height="48" HorizontalAlignment="Stretch" />
+                            <TextBlock Text="{Binding SendVM.ResultText}" Foreground="White" FontSize="15" TextWrapping="Wrap" />
+                        </StackPanel>
+
+                        <StackPanel Spacing="8" IsVisible="{Binding IsAddVisible}">
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="اسم الجروب" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding AddVM.GroupName}" /></Grid>
+                            <TextBox Text="{Binding AddVM.MembersText}" AcceptsReturn="True" Height="200" TextWrapping="Wrap" />
+                            <Button Content="إضافة" Command="{Binding AddVM.RunCommand}" Background="#D4A017" Foreground="Black" FontWeight="Bold" Height="48" HorizontalAlignment="Stretch" />
+                            <TextBlock Text="{Binding AddVM.StatusText}" Foreground="White" FontSize="15" TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding AddVM.ResultText}" Foreground="White" FontSize="15" TextWrapping="Wrap" />
+                        </StackPanel>
+
+                        <StackPanel Spacing="8" IsVisible="{Binding IsReadVisible}">
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="Chat ID" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding ReadVM.ChatId}" /></Grid>
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="العدد" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding ReadVM.CountText}" /></Grid>
+                            <Button Content="قراءة" Command="{Binding ReadVM.RunCommand}" Background="#D4A017" Foreground="Black" FontWeight="Bold" Height="48" HorizontalAlignment="Stretch" />
+                            <TextBlock Text="{Binding ReadVM.ResultText}" Foreground="White" FontSize="15" TextWrapping="Wrap" />
+                        </StackPanel>
+
+                        <StackPanel Spacing="8" IsVisible="{Binding IsProfileVisible}">
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="الاسم" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding ProfileVM.Name}" /></Grid>
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="البايو" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding ProfileVM.Bio}" /></Grid>
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="اليوزر" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding ProfileVM.Username}" /></Grid>
+                            <Button Content="فحص" Command="{Binding ProfileVM.RunCommand}" Background="#D4A017" Foreground="Black" FontWeight="Bold" Height="48" HorizontalAlignment="Stretch" />
+                            <TextBlock Text="{Binding ProfileVM.ResultText}" Foreground="White" FontSize="15" TextWrapping="Wrap" />
+                        </StackPanel>
+
+                        <StackPanel Spacing="8" IsVisible="{Binding IsGroupsVisible}">
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="اسم الجروب" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding GroupsVM.GroupName}" /></Grid>
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="اليوزر" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding GroupsVM.Username}" /></Grid>
+                            <Button Content="إنشاء" Command="{Binding GroupsVM.RunCommand}" Background="#D4A017" Foreground="Black" FontWeight="Bold" Height="48" HorizontalAlignment="Stretch" />
+                            <TextBlock Text="{Binding GroupsVM.ResultText}" Foreground="White" FontSize="15" TextWrapping="Wrap" />
+                        </StackPanel>
+
+                        <StackPanel Spacing="8" IsVisible="{Binding IsProxyVisible}">
+                            <TextBox Text="{Binding ProxyVM.InputText}" AcceptsReturn="True" Height="220" TextWrapping="Wrap" />
+                            <Button Content="فحص وتدوير" Command="{Binding ProxyVM.RunCommand}" Background="#D4A017" Foreground="Black" FontWeight="Bold" Height="48" HorizontalAlignment="Stretch" />
+                            <TextBlock Text="{Binding ProxyVM.ResultText}" Foreground="White" FontSize="15" TextWrapping="Wrap" />
+                        </StackPanel>
+
+                        <StackPanel Spacing="8" IsVisible="{Binding IsViewsVisible}">
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="القناة" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding ViewsVM.Channel}" /></Grid>
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="الإيموجي" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding ViewsVM.Emoji}" /></Grid>
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="العدد" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding ViewsVM.CountText}" /></Grid>
+                            <Button Content="تعزيز" Command="{Binding ViewsVM.RunCommand}" Background="#D4A017" Foreground="Black" FontWeight="Bold" Height="48" HorizontalAlignment="Stretch" />
+                            <TextBlock Text="{Binding ViewsVM.ResultText}" Foreground="White" FontSize="15" TextWrapping="Wrap" />
+                        </StackPanel>
+
+                        <StackPanel Spacing="8" IsVisible="{Binding IsReportsVisible}">
+                            <TextBox Text="{Binding ReportsText}" IsReadOnly="True" AcceptsReturn="True" Height="420" TextWrapping="Wrap" />
+                        </StackPanel>
+
+                        <StackPanel Spacing="8" IsVisible="{Binding IsSettingsVisible}">
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="تأخير بعد الرسالة" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding SettingsVM.DelayText}" /></Grid>
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="راحة بعد كم رسالة" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding SettingsVM.RestAfterText}" /></Grid>
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="مدة الراحة" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding SettingsVM.RestSecondsText}" /></Grid>
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="عدد الرسائل" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding SettingsVM.MessagesText}" /></Grid>
+                            <Button Content="حفظ وحساب" Command="{Binding SettingsVM.RunCommand}" Background="#D4A017" Foreground="Black" FontWeight="Bold" Height="48" HorizontalAlignment="Stretch" />
+                            <TextBlock Text="{Binding SettingsVM.ResultText}" Foreground="White" FontSize="15" TextWrapping="Wrap" />
+                        </StackPanel>
+
+                        <StackPanel Spacing="8" IsVisible="{Binding IsConverterVisible}">
+                            <Grid ColumnDefinitions="180,*"><TextBlock Text="مسار الملف" Foreground="White" FontSize="15" VerticalAlignment="Center" /><TextBox Grid.Column="1" Text="{Binding ConverterVM.FilePath}" /></Grid>
+                            <Button Content="تحويل" Command="{Binding ConverterVM.RunCommand}" Background="#D4A017" Foreground="Black" FontWeight="Bold" Height="48" HorizontalAlignment="Stretch" />
+                            <TextBlock Text="{Binding ConverterVM.ResultText}" Foreground="White" FontSize="15" TextWrapping="Wrap" />
+                        </StackPanel>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+
+        <Border Grid.Row="1" Background="#0A1B33" Padding="10,6">
+            <WrapPanel>
+                <TextBlock Text="{Binding StatusAccount}" Foreground="White" Margin="0,0,20,0" />
+                <TextBlock Text="{Binding StatusQuota}" Foreground="#D4A017" Margin="0,0,20,0" />
+                <TextBlock Text="{Binding StatusJob}" Foreground="White" />
+            </WrapPanel>
+        </Border>
+    </Grid>
+</Window>
